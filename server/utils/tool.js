@@ -9,28 +9,13 @@ var mailTransport = nodemailer.createTransport({
     pass: 'OQSKSEISPZVTHEMK'
   },
 });
-function sendEmail() {
+function sendEmail(email,cont) {
   var options = {
     from: 'qq819103524@163.com',
-    to: '819103524@qq.com',
-    // cc         : ''  //抄送
-    // bcc      : ''    //密送
+    to: email||'819103524@qq.com',
     subject: '一封来自Node Mailer的邮件',
     text: '一封来自Node Mailer的邮件',
-    html: '<h1>你好，这是一封来自NodeMailer的邮件！</h1><p>22222</p>',
-    // attachments : 
-    //             [
-    //                 {
-    //                     filename: 'img1.png',            // 改成你的附件名
-    //                     path: 'public/images/img1.png',  // 改成你的附件路径
-    //                     cid : '00000001'                 // cid可被邮件使用
-    //                 },
-    //                 {
-    //                     filename: 'img2.png',            // 改成你的附件名
-    //                     path: 'public/images/img2.png',  // 改成你的附件路径
-    //                     cid : '00000002'                 // cid可被邮件使用
-    //                 },
-    //             ]
+    html: `<h1>你好，这是一封来自NodeMailer的邮件！</h1><p>验证码:${cont}</p>`,
   };
   return new Promise((resolve,reject) => {
     mailTransport.sendMail(options, function (err, msg) {
@@ -90,8 +75,51 @@ function updateUser(id, parmas) {
   const queryStr = `update tb_user set ${str} where id=${id};`;
   return sequelize.query(queryStr);
 }
+
+async function dealCacheMail(email, getCode = false) {
+  try {
+    const searchRes = await sequelize.query(`SELECT * FROM tb_cache_mails where email='${email}';`);
+    const saveCode = parseInt(Math.random() * 100000),
+          hasResult = searchRes[0] && searchRes[0][0];
+    
+    if(getCode) {
+      if(hasResult) {
+        return {
+          code: 0,
+          saveCode: hasResult.code
+        }
+      } else {
+        return {
+          code: -1,
+          msg: '缓存没有邮箱'
+        }
+      }
+    }
+    if (hasResult) {
+      await sequelize.query(`update tb_cache_mails set code=${saveCode}`);
+      return {
+        code: 0,
+        msg: '邮箱已存在缓存中',
+        saveCode
+      }
+    } else {
+      await sequelize.query(`insert into tb_cache_mails values(null,'${email}',${saveCode});`);
+      return {
+        code: 0,
+        msg: '插入缓存成功'
+      }
+    }
+  } catch (error) {
+    return {
+      code: -1,
+      msg: error
+    }
+  }
+}
+
 module.exports = {
   searchUser,
   updateUser,
-  sendEmail
+  sendEmail,
+  dealCacheMail
 }

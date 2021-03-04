@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const sequelize = require('./db');
-const dealRegister = require('./users/register');
+const {dealRegister, registerSendMail} = require('./users/register');
 const dealLogin = require('./users/login');
-const {getToken} = require('./users/resetPass');
+const {getToken, resetByMail, confirmByMail} = require('./users/resetPass');
 // const mysql = require('mysql');
 // const connection = mysql.createConnection({
 //   host     : 'localhost',
@@ -95,6 +95,21 @@ router.post('/forgetPassword', (req, res) => {
     })
 })
 
+router.post('/registerSendMail',(req,res) => {
+  const query = req.body;
+  if(query.email) {
+    registerSendMail(query.email)
+    .then(obj => res.send(obj),obj => res.send(obj))
+  } else {
+    res.send({code:-1,msg:'请输入邮箱'})
+  }
+})
+
+router.get('/resetByMail',(req,res) => {
+  const query = req.query;
+  resetByMail(query.email)
+  .then(obj => res.send(obj),obj => res.send(obj));
+})
 
 router.get('/test', (req, res) => {
   console.log('test params-->', req.query);

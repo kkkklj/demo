@@ -49,4 +49,24 @@ const user = sequelize.define(
   }
 )
 user.sync();
+
+const mailCache = sequelize.define(
+  'tb_cache_mails',
+  {
+    'email': {
+      'type': Sequelize.STRING(100), 
+      'allowNull': false,
+      'unique': true         
+    },
+    "code": {
+      'type': Sequelize.MEDIUMINT(5), 
+      'allowNull': true,
+    }
+  },
+  {
+    'tableName': 'tb_cache_mails',
+    'timestamps': false
+  }
+)
+mailCache.sync();
 module.exports = sequelize;

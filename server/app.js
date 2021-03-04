@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const os = require('os');
 
+global.$gPath = __dirname;
 global.appRequire = function(p) {
   return require(path.resolve(__dirname, p))
 }
@@ -78,8 +79,9 @@ function getIPAdress() {
 }
 const myIp = getIPAdress();
 
-app.listen(9999,() => {
-  console.log('服务启动--》',9999);
-  console.log('地址为:',myIp+':9999')
+const listener = app.listen(9999,() => {
+  console.log('服务启动--》',listener.address().port);
+  console.log('地址为:',myIp+ ':' +listener.address().port)
 })
+global.$gMyIp = myIp +':' + listener.address().port
 module.exports = app;
