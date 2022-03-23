@@ -36,7 +36,12 @@ const user = sequelize.define(
     'token_get_date': {
       'type': Sequelize.BIGINT(64),
       'allowNull': false,
-    }
+    },
+    'token': {
+      'type': Sequelize.STRING(100),
+      'allowNull': true,
+      'defaultValue': null         
+    },
   },
   {
     'freezeTableName': true,
@@ -69,4 +74,7 @@ const mailCache = sequelize.define(
   }
 )
 mailCache.sync();
+
+
+
 module.exports = sequelize;

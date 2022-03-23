@@ -23,3 +23,8 @@ describe tb_user;
 | secretAnswer    | varchar(100) | NO   |     | NULL    |                |
 | submission_date | date         | YES  |     | NULL    |                |
 +-----------------+--------------+------+-----+---------+----------------+
+
+
+-- mysql -u root -p
+
+--show databases;

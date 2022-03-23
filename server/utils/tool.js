@@ -106,7 +106,8 @@ async function dealCacheMail(email, getCode = false) {
       await sequelize.query(`insert into tb_cache_mails values(null,'${email}',${saveCode});`);
       return {
         code: 0,
-        msg: '插入缓存成功'
+        msg: '插入缓存成功',
+        saveCode
       }
     }
   } catch (error) {

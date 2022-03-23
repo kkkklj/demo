@@ -7,7 +7,7 @@ function register({
   email,
   secretAnswer
 }) {
-  return sequelize.query(`insert into tb_user values(null,'${username}','${password}','${email}','${secretAnswer}',${new Date().getTime()},NOW());`);
+  return sequelize.query(`insert into tb_user values(null,'${username}','${password}','${email}','${secretAnswer}',${new Date().getTime()},null,NOW());`);
 }
 
 // function dealRegister2(parmas) {
@@ -89,7 +89,7 @@ async function dealRegister(parmas) {
 
     const confirmObj = await dealCacheMail(email,true);
     if(confirmObj.code == 0) {
-      if(confirmObj.saveCode !== mailCaptcha) {
+      if(confirmObj.saveCode != mailCaptcha) {
         return Promise.reject({ msg: '邮箱验证码错误' });
       }
     }

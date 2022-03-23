@@ -111,6 +111,13 @@ router.get('/resetByMail',(req,res) => {
   .then(obj => res.send(obj),obj => res.send(obj));
 })
 
+router.post('/confirmByMail',(req, res) => {
+  const query = req.body;
+  confirmByMail(query)
+  .then(obj => res.send(obj),obj => res.send(obj));
+})
+
+
 router.get('/test', (req, res) => {
   console.log('test params-->', req.query);
   res.send({ msg: 'success' })

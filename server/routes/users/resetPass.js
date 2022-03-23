@@ -39,14 +39,15 @@ async function getToken({ email, secretAnswer }) {
 
 async function resetByMail(email) {
   try {
+    email = decodeURIComponent(email)
     const userRaw = await searchUser({ email }),
       userRes = userRaw[0] && userRaw[0][0];
       console.log('userraw-->',userRes)
     if(userRes) {
       const cacheMailRaw = await dealCacheMail(email),
-            cacheMailRes = cacheMailRaw[0] && cacheMailRaw[0][0];
-      if(cacheMailRes && cacheMailRes.code == 0) {
-        await sendEmail(email, cacheMailRes.saveCode);
+            cacheMailRes = cacheMailRaw.saveCode;
+      if(cacheMailRes && cacheMailRaw.code == 0) {
+        await sendEmail(email, cacheMailRes);
         return {
           code: 0,
           msg: '邮箱发送成功'
@@ -80,20 +81,20 @@ async function confirmByMail({email,mailCaptcha,password}) {
     })
   }
   try {
-    const res = await dealCacheMail(email,true);
-    if(res.code == 0) {
-      if(res.saveCode !== mailCaptcha) {
+    const raw = await dealCacheMail(email,true);
+    if(raw.code == 0) {
+      if(raw.saveCode !== +mailCaptcha) {
         return Promise.reject({ msg: '邮箱验证码错误' });
       } else {
         const p = md5('sql223' + password);
-        await sequelize.query(`update tb_user set password="${p}" where email=${email};`);
+        await sequelize.query(`update tb_user set password="${p}" where email='${email}';`);
         return {
           code: 0,
           msg: '修改密码成功'
         }
       }
     } else {
-      throw res.msg
+      throw raw.msg
     }
   } catch (error) {
     return Promise.reject({

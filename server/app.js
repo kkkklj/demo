@@ -4,7 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const os = require('os');
-
 global.$gPath = __dirname;
 global.appRequire = function(p) {
   return require(path.resolve(__dirname, p))

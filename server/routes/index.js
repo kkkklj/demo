@@ -32,4 +32,21 @@ router.get('/imgsList', (req, res) => {
   
 })
 
+router.get('/update',(req,res) => {
+  const {version} = req.query;
+  console.log('version-->',version)
+  if(version == '1.1.0') {
+    console.log('无需更新')
+    res.send({
+      update: false
+    })
+  } else {
+    res.send({
+      update: true,
+      wgtUrl: 'http://192.168.19.88:9999/file/__UNI__9E7AFA0.wgt'
+    })
+  }
+  
+})
+
 module.exports = router;
