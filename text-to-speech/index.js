@@ -27,11 +27,6 @@
   sdk.SpeechSynthesizer.AllVoices
   // create the speech synthesizer.
   var synthesizer = new sdk.SpeechSynthesizer(speechConfig,audioConfig);
-  // synthesizer.getVoicesAsync()
-  // synthesizer.FromConfig(speechConfig,autoDetectSourceLanguageConfig,audioConfig)
-  
-  // synthesizer.getVoicesAsync().then(res => console.log('res->',res))
-  // synthesizer.autoDetectSourceLanguage = true;
   var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
