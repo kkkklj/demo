@@ -23,7 +23,7 @@
   var audioConfig = sdk.AudioConfig.fromAudioFileOutput(filename);
   var speechConfig = sdk.SpeechConfig.fromSubscription(subscriptionKey, serviceRegion);
   // speechConfig.speechRecognitionLanguage = 'ja-JP'
-  speechConfig.speechSynthesisLanguage = 'zh-CN';
+  speechConfig.speechSynthesisLanguage = 'zh-CN';//修改语言
   sdk.SpeechSynthesizer.AllVoices
   // create the speech synthesizer.
   var synthesizer = new sdk.SpeechSynthesizer(speechConfig,audioConfig);
